@@ -30,8 +30,10 @@ def get_quotes():
         token = get_token_from_header()
         token_command_handler.validate_token(token)
         return json.dumps("good_token")
-    except token_command_handler.TokenExpiredError as e:
+    except token_command_handler.TokenExpiredError:
         return json.dumps([{"message": "Error, the token has expired."}]), 401
+    except TokenNotProvided:
+        return json.dumps([{"message": "Error, the token was not provided."}]), 401
     except Exception as e:
         print(f"Get Quotes error. Caused by {e}")
         return json.dumps([{"message": "Internal server error. Caused by {}".format(e)}]), 500
@@ -39,7 +41,14 @@ def get_quotes():
 
 def get_token_from_header():
     """Obtain the bearer token from header"""
-    return request.headers.get('Authorization') \
-        .replace('Bearer', '') \
-        .strip()
+    try:
+        return request.headers.get('Authorization') \
+            .replace('Bearer', '') \
+            .strip()
+    except Exception as e:
+        raise TokenNotProvided(e)
 
+
+class TokenNotProvided(Exception):
+    """Raised when the Token has expired"""
+    pass
