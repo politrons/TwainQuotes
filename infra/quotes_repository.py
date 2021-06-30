@@ -6,18 +6,21 @@ from domain.user_quotes import UserQuotes
 
 class QuoteRepository:
     user_quotes = []
+    quotes = []
 
     def __init__(self):
-        quotes = self.__load_quotes()
-        self.user_quotes = UserQuotes("Politrons", quotes)
+        self.user_quotes = []
+        self.quotes = []
+        self.__load_quotes()
+        self.user_quotes = UserQuotes("Politrons", self.quotes)
 
-    @staticmethod
-    def __load_quotes() -> list:
-        quotes = []
+    def __load_quotes(self):
         with open("../json/quotes.json") as json_file:
-            for json_quote in json.load(json_file):
-                quotes.append(Quote(json_quote["id"], json_quote["quote"]))
-        return quotes
+            for q in json.load(json_file):
+                self.quotes.append(Quote(q["id"], q["quote"]))
+
+    def get_quotes(self) -> list:
+        return self.quotes
 
     def get_user_quotes(self) -> UserQuotes:
         return self.user_quotes

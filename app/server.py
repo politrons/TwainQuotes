@@ -1,8 +1,9 @@
 from flask import Flask, json, request
 
+from domain.QuoteExceptions import QuoteNotFoundException
 from app import token_command_handler
 from app.command import CreateTokenCommand
-from app.encoders import UserQuotesEncoder
+from app.encoders import QuotesEncoder
 from app.quote_service import QuoteService
 
 app = Flask(__name__)
@@ -33,13 +34,33 @@ def get_quotes():
     try:
         token = get_token_from_header()
         token_command_handler.validate_token(token)
-        user_quotes = service.get_all_quotes()
-        user_quotes_json = UserQuotesEncoder().encode(user_quotes)
+        user_quotes = service.get_user_quotes()
+        user_quotes_json = QuotesEncoder().encode(user_quotes)
         return json.dumps(user_quotes_json)
     except token_command_handler.TokenExpiredError:
         return json.dumps([{"message": "Error, the token has expired."}]), 401
     except TokenNotProvided:
         return json.dumps([{"message": "Error, the token was not provided."}]), 401
+    except Exception as e:
+        print(f"Get Quotes error. Caused by {e}")
+        return json.dumps([{"message": "Internal server error. Caused by {}".format(e)}]), 500
+
+
+@app.route('/quotes/<quote_id>', methods=['GET'])
+def get_quote_by_id(quote_id):
+    try:
+        token = get_token_from_header()
+        token_command_handler.validate_token(token)
+        quote = service.get_quote_by_id(quote_id)
+        quote_json = QuotesEncoder().encode(quote)
+        return json.dumps(quote_json)
+
+    except token_command_handler.TokenExpiredError:
+        return json.dumps([{"message": "Error, the token has expired."}]), 401
+    except TokenNotProvided:
+        return json.dumps([{"message": "Error, the token was not provided."}]), 401
+    except QuoteNotFoundException:
+        return json.dumps([{"message": "Error, the quote with id {} does not exist.".format(quote_id)}]), 404
     except Exception as e:
         print(f"Get Quotes error. Caused by {e}")
         return json.dumps([{"message": "Internal server error. Caused by {}".format(e)}]), 500
