@@ -1,4 +1,6 @@
 import json
+import os
+
 from domain.user_quotes import UserQuotes
 
 
@@ -11,7 +13,7 @@ class QuoteRepository:
         self.user_quotes = UserQuotes("Politrons", self.quotes)
 
     def __load_quotes(self):
-        with open('quotes.json') as json_file:
+        with open("../json/quotes.json") as json_file:
             quote_list = json.load(json_file)
             print(quote_list)
             self.quotes = quote_list
