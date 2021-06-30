@@ -1,4 +1,4 @@
 class UserQuotes:
-    def __init__(self, name, quotes):
-        self.name = name
+    def __init__(self, user, quotes):
+        self.user = user
         self.quotes = quotes

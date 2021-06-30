@@ -1,25 +1,23 @@
 import json
-import os
 
+from domain.quotes import Quote
 from domain.user_quotes import UserQuotes
 
 
 class QuoteRepository:
-    quotes = []
     user_quotes = []
 
     def __init__(self):
-        self.__load_quotes()
-        self.user_quotes = UserQuotes("Politrons", self.quotes)
+        quotes = self.__load_quotes()
+        self.user_quotes = UserQuotes("Politrons", quotes)
 
-    def __load_quotes(self):
+    @staticmethod
+    def __load_quotes() -> list:
+        quotes = []
         with open("../json/quotes.json") as json_file:
-            quote_list = json.load(json_file)
-            print(quote_list)
-            self.quotes = quote_list
-
-    def get_quotes(self) -> list:
-        return self.quotes
+            for json_quote in json.load(json_file):
+                quotes.append(Quote(json_quote["id"], json_quote["quote"]))
+        return quotes
 
     def get_user_quotes(self) -> UserQuotes:
         return self.user_quotes
