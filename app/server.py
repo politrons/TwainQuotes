@@ -2,8 +2,12 @@ from flask import Flask, json, request
 
 from app import token_command_handler
 from app.command import CreateTokenCommand
+from app.encoders import UserQuotesEncoder
+from app.quote_service import QuoteService
 
 app = Flask(__name__)
+
+service = QuoteService()
 
 
 @app.route('/')
@@ -29,7 +33,9 @@ def get_quotes():
     try:
         token = get_token_from_header()
         token_command_handler.validate_token(token)
-        return json.dumps("good_token")
+        user_quotes = service.get_all_quotes()
+        user_quotes_json = UserQuotesEncoder().encode(user_quotes)
+        return json.dumps(user_quotes_json)
     except token_command_handler.TokenExpiredError:
         return json.dumps([{"message": "Error, the token has expired."}]), 401
     except TokenNotProvided:
