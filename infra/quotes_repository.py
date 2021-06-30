@@ -5,6 +5,7 @@ from domain.user_quotes import UserQuotes
 
 
 class QuoteRepository:
+    """TODO:Document me"""
     user_quotes = []
     quotes = []
 

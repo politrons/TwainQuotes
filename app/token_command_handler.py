@@ -1,7 +1,9 @@
 import time
 import random
 
-minute_in_ns = 60000000000
+# TODO:Put it back
+# minute_in_ns = 60000000000
+minute_in_ns = 6000000000000
 
 tokens = {}
 
@@ -15,7 +17,7 @@ def create_token(command):
     token = f"{generate_random(8)}-{generate_random(4)}"
     global tokens
     tuple_expire_time_count = (time.perf_counter_ns(), 0)
-    tokens = {**tokens, **{token: tuple_expire_time_count}}
+    tokens.update({token: tuple_expire_time_count})
     return token
 
 
