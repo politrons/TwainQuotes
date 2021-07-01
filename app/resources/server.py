@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 service = QuoteService()
 
-logging.basicConfig(filename=Path('server.log').resolve(), encoding='utf-8', level=logging.DEBUG)
+logging.basicConfig(filename=Path('../server.log').resolve(), encoding='utf-8', level=logging.DEBUG)
 
 
 @app.route('/')

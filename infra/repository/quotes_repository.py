@@ -6,7 +6,7 @@ from domain.model.user_quotes import UserQuotes
 
 
 class QuoteRepository:
-    """TODO:Document me"""
+    """Repository class that load quote json file as persistent data."""
     user_quotes = []
     quotes = []
 
@@ -23,7 +23,9 @@ class QuoteRepository:
                 self.quotes.append(Quote(q["id"], q["quote"]))
 
     def get_quotes(self) -> list:
+        """get the list of quotes loaded from the json file"""
         return self.quotes
 
     def get_user_quotes(self) -> UserQuotes:
+        """get the UserQuote hardcoded as the unique user register in the system."""
         return self.user_quotes
