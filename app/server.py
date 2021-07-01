@@ -1,4 +1,4 @@
-from flask import Flask, json, request
+from flask import current_app, Blueprint, Flask, json, request
 
 from domain.quote_exceptions import QuoteNotFoundException
 from app import token_command_handler
@@ -17,6 +17,14 @@ logging.basicConfig(filename='../logs/server.log', encoding='utf-8', level=loggi
 @app.route('/')
 def index():
     return 'Twain quotes server. Author Pablo Perez Garcia'
+
+
+with app.test_client() as c:
+    rv = c.post('/api/auth', json={
+        'email': 'flask@example.com', 'password': 'secret'
+    })
+    json_data = rv.get_json()
+    assert True
 
 
 @app.route('/auth', methods=['POST'])

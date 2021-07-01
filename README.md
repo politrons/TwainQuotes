@@ -4,6 +4,8 @@
 * pip install Flask
 * pip install flask[async]  
 * pip install flask async  
+* pip install pytest 
+* pip install Flask-API  
 * virtualenv env
 * . env/bin/activate
 * cd app/  
