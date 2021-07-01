@@ -2,6 +2,8 @@
 
 ## Run server
 * pip install Flask
+* pip install flask[async]  
+* pip install flask async  
 * virtualenv env
 * . env/bin/activate
 * cd app/  
