@@ -1,7 +1,7 @@
 import unittest
 
-from app.quote_service import QuoteService, ShareCodeNotFoundException
-from domain.quote_exceptions import QuoteNotFoundException
+from app.service.quote_service import QuoteService, ShareCodeNotFoundException
+from domain.exceptions.quote_exceptions import QuoteNotFoundException
 
 
 class TestQuoteRepository(unittest.TestCase):

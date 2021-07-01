@@ -2,10 +2,10 @@ import random
 import string
 import time
 
-from domain.quote_exceptions import QuoteNotFoundException
-from infra.quotes_repository import QuoteRepository
-from domain.user_quotes import UserQuotes
-from domain.quotes import Quote
+from domain.exceptions.quote_exceptions import QuoteNotFoundException
+from infra.repository.quotes_repository import QuoteRepository
+from domain.model.user_quotes import UserQuotes
+from domain.model.quotes import Quote
 
 
 def generate_shared_code() -> string:

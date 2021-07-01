@@ -1,7 +1,7 @@
 import unittest
 
-import app.token_command_handler as handler
-from app.command import CreateTokenCommand
+import app.handler.token_command_handler as handler
+from app.utils.command import CreateTokenCommand
 
 
 class TestTokenCommandHandler(unittest.TestCase):

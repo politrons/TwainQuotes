@@ -1,30 +1,24 @@
-from flask import current_app, Blueprint, Flask, json, request
+from pathlib import Path
 
-from domain.quote_exceptions import QuoteNotFoundException
-from app import token_command_handler
-from app.command import CreateTokenCommand
-from app.encoders import QuotesEncoder
-from app.quote_service import QuoteService, ShareCodeNotFoundException
+from flask import Flask, json, request
+
+from domain.exceptions.quote_exceptions import QuoteNotFoundException
+from app.handler import token_command_handler
+from app.utils.command import CreateTokenCommand
+from app.utils.encoders import QuotesEncoder
+from app.service.quote_service import QuoteService, ShareCodeNotFoundException
 import logging
 
 app = Flask(__name__)
 
 service = QuoteService()
 
-logging.basicConfig(filename='../logs/server.log', encoding='utf-8', level=logging.DEBUG)
+logging.basicConfig(filename=Path('server.log').resolve(), encoding='utf-8', level=logging.DEBUG)
 
 
 @app.route('/')
 def index():
     return 'Twain quotes server. Author Pablo Perez Garcia'
-
-
-with app.test_client() as c:
-    rv = c.post('/api/auth', json={
-        'email': 'flask@example.com', 'password': 'secret'
-    })
-    json_data = rv.get_json()
-    assert True
 
 
 @app.route('/auth', methods=['POST'])

@@ -1,7 +1,8 @@
 import json
-
-from domain.quotes import Quote
-from domain.user_quotes import UserQuotes
+import os
+from pathlib import Path
+from domain.model.quotes import Quote
+from domain.model.user_quotes import UserQuotes
 
 
 class QuoteRepository:
@@ -16,7 +17,8 @@ class QuoteRepository:
         self.user_quotes = UserQuotes("Politrons", self.quotes)
 
     def __load_quotes(self):
-        with open("../json/quotes.json") as json_file:
+        path = Path('json/quotes.json').resolve()
+        with open(path) as json_file:
             for q in json.load(json_file):
                 self.quotes.append(Quote(q["id"], q["quote"]))
 

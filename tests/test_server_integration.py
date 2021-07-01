@@ -1,7 +1,7 @@
 import json
 import unittest
 
-from app.server import app
+from app.resources.server import app
 
 
 class TestServer(unittest.TestCase):

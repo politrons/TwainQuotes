@@ -1,6 +1,6 @@
 import unittest
 
-from infra.quotes_repository import QuoteRepository
+from infra.repository.quotes_repository import QuoteRepository
 
 
 class TestQuoteRepository(unittest.TestCase):
