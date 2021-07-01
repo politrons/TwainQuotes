@@ -30,7 +30,6 @@ class QuoteService:
         except Exception as e:
             raise QuoteNotFoundException(e)
 
-    # TODO:Add a test
     def create_shared_link(self, quote_id) -> string:
         """Validate if the Quote exist for the [quote_id] then we generate an alphanumeric number,
         and we add an entry in the [shared_links] with [shared_link] as key and [quote_id] as value.
@@ -42,7 +41,6 @@ class QuoteService:
         self.expiration_shared_link.update({shared_link: time.perf_counter_ns()})
         return shared_link
 
-    # TODO:Add a test
     def get_quote_from_shared_url(self, shared_link) -> Quote:
         """TODO:Document me"""
         quote_id = self.shared_links.pop(shared_link)
