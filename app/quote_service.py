@@ -43,5 +43,12 @@ class QuoteService:
 
     def get_quote_from_shared_url(self, shared_link) -> Quote:
         """TODO:Document me"""
-        quote_id = self.shared_links.pop(shared_link)
-        return self.get_quote_by_id(quote_id)
+        try:
+            quote_id = self.shared_links.pop(shared_link)
+            return self.get_quote_by_id(quote_id)
+        except KeyError:
+            raise ShareCodeNotFoundException()
+
+
+class ShareCodeNotFoundException(Exception):
+    """Raised when the share code was not found because was wrong, or was already created"""
