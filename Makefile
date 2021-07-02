@@ -2,14 +2,16 @@
 # define the name of the virtual environment directory
 VENV := venv
 
-# default target, when make executed without arguments
-all: venv
+build: venv
 
 $(VENV)/bin/activate: requirements.txt
 	python3 -m venv $(VENV)
 	./$(VENV)/bin/pip install -r requirements.txt
 
 venv: $(VENV)/bin/activate
+
+test:
+	python -m unittest discover
 
 run:
 	. venv/bin/activate

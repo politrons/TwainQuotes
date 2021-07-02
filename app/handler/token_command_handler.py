@@ -1,11 +1,9 @@
 import time
 import random
 
-# TODO:Put it back
-# minute_in_ns = 60000000000
 from app.exceptions.token_exceptions import TokenExpiredError
 
-minute_in_ns = 6000000000000
+minute_in_ns = 60000000000
 
 tokens = {}
 
@@ -23,7 +21,9 @@ def create_token(command):
 
 
 def validate_token(token):
-    """Validate """
+    """Validate the token checking if the number of times used the token has not exceed the limit,
+    or the expiration time of the token is not older than one minute.
+    In case of invalid token we raise a [TokenExpiredError] """
     expiration_token_time = tokens.get(token)[0]
     count = tokens.get(token)[1]
     if are_token_or_count_exceed_limit(count, expiration_token_time):

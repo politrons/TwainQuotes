@@ -30,16 +30,9 @@ To run the test, in the root folder just run python command:
  python -m unittest discover
 ````
 
-## Run server
-* pip install Flask
-* pip install pytest
-* virtualenv env
-* . env/bin/activate
-* cd app/
-* export FLASK_APP=server
-* flask run
+## Makefile
 
-## Build
-
-* python3 -m pip install --upgrade build
-* python3 -m build
+* **build**: Create the virtual environment folder and download all dependencies specify in requirement.txt
+* **test**: Pass all unit and integration test
+* **run**: Run the ```Flask``` server
+* **clean**: Delete the virtual environment folder

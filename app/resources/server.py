@@ -61,8 +61,8 @@ def get_quote_by_id(quote_id):
         token = get_token_from_header()
         token_command_handler.validate_token(token)
         quote = service.get_quote_by_id(quote_id)
-        quote_json = QuotesEncoder().encode(quote)
-        return json.dumps(quote_json)
+        quote_json = QuotesEncoder().encode(quote.quote)
+        return json.dumps({"quote": "{}".format(quote_json)})
 
     except token_command_handler.TokenExpiredError:
         logging.error(f"Error, the token has expired.")
@@ -94,7 +94,7 @@ def create_share_url(quote_id):
         return json.dumps({"message": "Error, the token was not provided."}), 401
     except QuoteNotFoundException:
         logging.error(f"Error, the quote with id {quote_id} does not exist.")
-        return json.dumps([{"message": "Error, the quote with id {} does not exist.".format(quote_id)}]), 404
+        return json.dumps({"message": "Error, the quote with id {} does not exist.".format(quote_id)}), 404
     except Exception as e:
         logging.error(f"Internal server error. Caused by {e}")
         return json.dumps({"message": "Internal server error. Caused by {}".format(e)}), 500
@@ -105,8 +105,8 @@ def use_share_url(share_url):
     try:
         logging.debug('Request to /share/<share_url> received')
         quote = service.get_quote_from_shared_url(share_url)
-        quote_json = QuotesEncoder().encode(quote)
-        return json.dumps(quote_json)
+        quote_json = QuotesEncoder().encode(quote.quote)
+        return json.dumps({"quote": "{}".format(quote_json)})
 
     except ShareCodeNotFoundException:
         logging.error("Error, the share url is not correct or is not longer valid.")
