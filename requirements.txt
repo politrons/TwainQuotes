@@ -1,2 +1,4 @@
 Flask
+schedule
+APScheduler==3.7.0
 pytest

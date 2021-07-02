@@ -61,8 +61,7 @@ class TestServer(unittest.TestCase):
             client.environ_base['HTTP_AUTHORIZATION'] = 'Bearer ' + json_token["token"]
             rv = client.get('/quotes/16166cf3')
         self.assertTrue(rv.status_code == 200)
-        quote = json.loads(rv.get_data())
-        json_quote = json.loads(quote)
+        json_quote = json.loads(rv.get_data())
 
         self.assertTrue(json_quote)
-        self.assertEqual(json_quote["id"], "16166cf3")
+        self.assertEqual(json_quote["quote"], '"The secret of getting ahead is getting started."')

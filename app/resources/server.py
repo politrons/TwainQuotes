@@ -1,17 +1,48 @@
+import logging
+import time
 from pathlib import Path
 
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from flask import Flask, json, request
 
-from domain.exceptions.quote_exceptions import QuoteNotFoundException
+from apscheduler.schedulers.background import BackgroundScheduler
+
 from app.handler import token_command_handler
+from app.handler.token_command_handler import are_token_or_count_exceed_limit, minute_in_ns
+from app.service.quote_service import QuoteService, ShareCodeNotFoundException
 from app.utils.command import CreateTokenCommand
 from app.utils.encoders import QuotesEncoder
-from app.service.quote_service import QuoteService, ShareCodeNotFoundException
-import logging
+from domain.exceptions.quote_exceptions import QuoteNotFoundException
 
 app = Flask(__name__)
 
 service = QuoteService()
+
+
+def clean_old_shared_links():
+    for shared_link, expiration_time in service.expiration_shared_link.items():
+        print(shared_link, '->', expiration_time)
+        if (time.perf_counter_ns() - expiration_time) > minute_in_ns:
+            """We delete the expired shared_link """
+            logging.debug(f"Deleting expired share_link {shared_link}")
+            service.shared_links.pop(shared_link)
+
+
+def clean_old_tokens():
+    for token, tuple_expiration_time_and_count in token_command_handler.tokens.items():
+        expiration_time = tuple_expiration_time_and_count[0]
+        print(token, '->', expiration_time)
+        if (time.perf_counter_ns() - expiration_time) > minute_in_ns:
+            """We delete the expired token """
+            print(f"deleting token {token}")
+            logging.debug(f"Deleting expired token {token}")
+            token_command_handler.tokens.pop(token)
+
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(clean_old_shared_links, 'interval', seconds=2)
+scheduler.add_job(clean_old_tokens, 'interval', seconds=2)
+scheduler.start()
 
 logging.basicConfig(filename=Path('../server.log').resolve(), encoding='utf-8', level=logging.DEBUG)
 
