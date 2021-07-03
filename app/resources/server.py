@@ -32,12 +32,12 @@ scheduler.start()
 
 
 @app.route('/')
-def index():
+async def index():
     return 'Twain quotes server. Author Pablo Perez Garcia'
 
 
 @app.route('/auth', methods=['POST'])
-def auth_user():
+async def auth_user():
     try:
         logging.debug('Request to auth received')
         command_dict = request.get_json()
@@ -50,7 +50,7 @@ def auth_user():
 
 
 @app.route('/quotes', methods=['GET'])
-def get_quotes():
+async def get_quotes():
     try:
         logging.debug('Request to quotes/ received')
         token = get_token_from_header()
@@ -70,7 +70,7 @@ def get_quotes():
 
 
 @app.route('/quotes/<quote_id>', methods=['GET'])
-def get_quote_by_id(quote_id):
+async def get_quote_by_id(quote_id):
     try:
         logging.debug('Request to /quotes/<quote_id> received')
         token = get_token_from_header()
@@ -94,7 +94,7 @@ def get_quote_by_id(quote_id):
 
 
 @app.route('/quotes/<quote_id>/share', methods=['GET'])
-def create_share_url(quote_id):
+async def create_share_url(quote_id):
     try:
         logging.debug('Request to /quotes/<quote_id>/share received')
         token = get_token_from_header()
@@ -116,7 +116,7 @@ def create_share_url(quote_id):
 
 
 @app.route('/share/<share_url>', methods=['GET'])
-def use_share_url(share_url):
+async def use_share_url(share_url):
     try:
         logging.debug('Request to /share/<share_url> received')
         quote = service.get_quote_from_shared_url(share_url)
