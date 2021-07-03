@@ -1,14 +1,11 @@
 import logging
-import time
 from pathlib import Path
 
+from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, json, request
 
-from apscheduler.schedulers.background import BackgroundScheduler
-
 from app.handler import token_command_handler
-from app.handler.token_command_handler import are_token_or_count_exceed_limit, minute_in_ns
-from app.scheduler.quote_scheduler import clean_old_shared_links, clean_old_tokens
+from app.scheduler.quote_scheduler import QuoteScheduler
 from app.service.quote_service import QuoteService, ShareCodeNotFoundException
 from app.utils.command import CreateTokenCommand
 from app.utils.encoders import QuotesEncoder
@@ -20,13 +17,15 @@ service = QuoteService()
 
 logging.basicConfig(filename=Path('../server.log').resolve(), encoding='utf-8', level=logging.DEBUG)
 
+quote_scheduler = QuoteScheduler(60000000000)
+
 """
 Schedulers
 -----------
 """
 scheduler = BackgroundScheduler()
-scheduler.add_job(lambda: clean_old_shared_links(service, logging), 'interval', seconds=2)
-scheduler.add_job(lambda: clean_old_tokens(logging), 'interval', seconds=2)
+scheduler.add_job(lambda: quote_scheduler.clean_old_shared_links(service, logging), 'interval', seconds=2)
+scheduler.add_job(lambda: quote_scheduler.clean_old_tokens(logging), 'interval', seconds=2)
 scheduler.start()
 
 
