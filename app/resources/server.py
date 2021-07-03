@@ -5,6 +5,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, json, request
 
 from app.handler import token_command_handler
+from app.handler.token_command_handler import TokenCommandHandler
 from app.scheduler.quote_scheduler import QuoteScheduler
 from app.service.quote_service import QuoteService, ShareCodeNotFoundException
 from app.utils.command import CreateTokenCommand
@@ -13,20 +14,20 @@ from domain.exceptions.quote_exceptions import QuoteNotFoundException
 
 app = Flask(__name__)
 
-service = QuoteService()
-
 logging.basicConfig(filename=Path('../server.log').resolve(), encoding='utf-8', level=logging.DEBUG)
-
-quote_scheduler = QuoteScheduler(60000000000)
-
 """
 Schedulers
 -----------
 """
+quote_scheduler = QuoteScheduler(60000000000)
+
 scheduler = BackgroundScheduler()
-scheduler.add_job(lambda: quote_scheduler.clean_old_shared_links(service, logging), 'interval', seconds=2)
-scheduler.add_job(lambda: quote_scheduler.clean_old_tokens(logging), 'interval', seconds=2)
+scheduler.add_job(lambda: quote_scheduler.clean_expired_share_links(service, logging), 'interval', seconds=60)
+scheduler.add_job(lambda: quote_scheduler.clean_expired_tokens(logging), 'interval', seconds=60)
 scheduler.start()
+
+commandHandler = TokenCommandHandler()
+service = QuoteService()
 
 
 @app.route('/')
@@ -40,7 +41,7 @@ def auth_user():
         logging.debug('Request to auth received')
         command_dict = request.get_json()
         command = CreateTokenCommand(**command_dict)
-        token = token_command_handler.create_token(command)
+        token = commandHandler.create_token(command)
         return json.dumps({"token": f"{token}"})
     except Exception as e:
         logging.error(f"Internal server error. Caused by {e}")
@@ -52,7 +53,7 @@ def get_quotes():
     try:
         logging.debug('Request to quotes/ received')
         token = get_token_from_header()
-        token_command_handler.validate_token(token)
+        commandHandler.validate_token(token)
         user_quotes = service.get_user_quotes()
         user_quotes_json = QuotesEncoder().encode(user_quotes)
         return json.dumps(user_quotes_json)
@@ -72,7 +73,7 @@ def get_quote_by_id(quote_id):
     try:
         logging.debug('Request to /quotes/<quote_id> received')
         token = get_token_from_header()
-        token_command_handler.validate_token(token)
+        commandHandler.validate_token(token)
         quote = service.get_quote_by_id(quote_id)
         quote_json = QuotesEncoder().encode(quote.quote)
         return json.dumps({"quote": "{}".format(quote_json)})
@@ -96,7 +97,7 @@ def create_share_url(quote_id):
     try:
         logging.debug('Request to /quotes/<quote_id>/share received')
         token = get_token_from_header()
-        token_command_handler.validate_token(token)
+        commandHandler.validate_token(token)
         shared_code = service.create_shared_link(quote_id)
         return json.dumps({"share_url": "/share/{}".format(shared_code)})
     except token_command_handler.TokenExpiredError:

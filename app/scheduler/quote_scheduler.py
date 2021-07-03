@@ -4,11 +4,12 @@ from app.handler import token_command_handler
 
 
 class QuoteScheduler:
+    """TODO:Document me"""
 
     def __init__(self, expiration_time_limit):
         self.expiration_time_limit = expiration_time_limit
 
-    def clean_old_shared_links(self, service, logging):
+    def clean_expired_share_links(self, service, logging):
         for shared_link, expiration_time in service.expiration_shared_link.items():
             print(shared_link, '->', expiration_time)
             if (time.perf_counter_ns() - expiration_time) > self.expiration_time_limit:
@@ -16,7 +17,7 @@ class QuoteScheduler:
                 logging.debug(f"Deleting expired share_link {shared_link}")
                 service.shared_links.pop(shared_link)
 
-    def clean_old_tokens(self, logging):
+    def clean_expired_tokens(self, logging):
         for token, tuple_expiration_time_and_count in token_command_handler.tokens.items():
             expiration_time = tuple_expiration_time_and_count[0]
             print(token, '->', expiration_time)
