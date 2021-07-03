@@ -8,26 +8,27 @@ from app.handler import token_command_handler
 from app.handler.token_command_handler import TokenCommandHandler
 from app.scheduler.quote_scheduler import QuoteScheduler
 from app.service.quote_service import QuoteService, ShareCodeNotFoundException
-from app.utils.command import CreateTokenCommand
+from app.command.command import CreateTokenCommand
 from app.utils.encoders import QuotesEncoder
 from domain.exceptions.quote_exceptions import QuoteNotFoundException
 
 app = Flask(__name__)
 
 logging.basicConfig(filename=Path('../server.log').resolve(), encoding='utf-8', level=logging.DEBUG)
+
+commandHandler = TokenCommandHandler(60000000000)
+service = QuoteService()
+
 """
 Schedulers
 -----------
 """
-quote_scheduler = QuoteScheduler(60000000000)
+quote_scheduler = QuoteScheduler(60000000000, service, commandHandler)
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(lambda: quote_scheduler.clean_expired_share_links(service, logging), 'interval', seconds=60)
-scheduler.add_job(lambda: quote_scheduler.clean_expired_tokens(logging), 'interval', seconds=60)
+scheduler.add_job(lambda: quote_scheduler.clean_expired_share_links(), 'interval', seconds=60)
+scheduler.add_job(lambda: quote_scheduler.clean_expired_tokens(), 'interval', seconds=60)
 scheduler.start()
-
-commandHandler = TokenCommandHandler()
-service = QuoteService()
 
 
 @app.route('/')

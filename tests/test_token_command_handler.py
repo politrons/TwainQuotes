@@ -1,19 +1,19 @@
 import unittest
 
 import app.handler.token_command_handler as handler
-from app.utils.command import CreateTokenCommand
+from app.command.command import CreateTokenCommand
 
 
 class TestTokenCommandHandler(unittest.TestCase):
 
     def test_create_token(self):
-        token_command_handler = handler.TokenCommandHandler()
+        token_command_handler = handler.TokenCommandHandler(60000000000)
         command = CreateTokenCommand("username", "password")
         token = token_command_handler.create_token(command)
         self.assertTrue(len(token) > 0)
 
     def test_validate(self):
-        token_command_handler = handler.TokenCommandHandler()
+        token_command_handler = handler.TokenCommandHandler(60000000000)
         command = CreateTokenCommand("username", "password")
         token = token_command_handler.create_token(command)
         token_command_handler.validate_token(token)
