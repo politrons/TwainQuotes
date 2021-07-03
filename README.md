@@ -24,15 +24,18 @@ In the application I invested mostly of the time implementing the test framework
 
 * ```Unit```: I used **unittest** to test all the classes of app, domain and infra .
 * ```Integration```: I used **unittest** with **flask** test_client, to startup the server and test the end to end endpoints.
-
-To run the test, in the root folder just run python command:
-````
- python -m unittest discover
-````
+* ````Performance```` Probably one the most important type of testing in the pyramid. It will give you the guarantee,
+that the SLA it keeps unaltered in time, and the feature has a specific performance.  It also it guarantees no concurrency issues.
 
 ## Makefile
 
 * **build**: Create the virtual environment folder and download all dependencies specify in requirement.txt
 * **test**: Pass all unit and integration test
+* **performance**: Pass all performance test
 * **run**: Run the ```Flask``` server
 * **clean**: Delete the virtual environment folder
+
+## Running
+
+To run and test manually the service, you can just use the [MakeFile](Makefile) with the option run,
+and then open postman and import the endpoint [collection](postman/Twain.postman_collection.json)
