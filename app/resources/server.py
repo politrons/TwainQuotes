@@ -6,7 +6,7 @@ from flask import Flask, json, request
 
 from app.handler import token_command_handler
 from app.handler.token_command_handler import TokenCommandHandler
-from app.scheduler.quote_scheduler import QuoteScheduler
+from app.scheduler.quote_scheduler_cleaner import QuoteSchedulerCleaner
 from app.service.quote_service import QuoteService, ShareCodeNotFoundException
 from app.command.command import CreateTokenCommand
 from app.utils.encoders import QuotesEncoder
@@ -23,7 +23,7 @@ service = QuoteService()
 Schedulers
 -----------
 """
-quote_scheduler = QuoteScheduler(60000000000, service, commandHandler)
+quote_scheduler = QuoteSchedulerCleaner(60000000000, service, commandHandler)
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(lambda: quote_scheduler.clean_expired_share_links(), 'interval', seconds=60)

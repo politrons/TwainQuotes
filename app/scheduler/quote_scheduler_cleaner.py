@@ -1,14 +1,10 @@
+import logging
 import time
 
-from app.handler import token_command_handler
 
-import logging
-
-from app.service.quote_service import QuoteService
-
-
-class QuoteScheduler:
-    """TODO:Document me"""
+class QuoteSchedulerCleaner:
+    """This class is responsible to clean the token and share_links that has expired the time to live.
+    Doing this we keep the memory size of the dictionaries [token] and [share_link] as small as we can."""
 
     def __init__(self, expiration_time_limit, service, token_command):
         self.service = service
