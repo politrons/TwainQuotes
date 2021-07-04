@@ -24,7 +24,7 @@ quotes_encoder = QuotesEncoder()
 Schedulers
 -----------
 """
-quote_scheduler = QuoteSchedulerCleaner(60000000000, service, commandHandler)
+quote_scheduler = QuoteSchedulerCleaner(service, commandHandler)
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(lambda: quote_scheduler.clean_expired_share_links(), 'interval', seconds=60)

@@ -6,7 +6,7 @@ class QuoteSchedulerCleaner:
     """This class is responsible to clean the token and share_links that has expired the time to live.
     Doing this we keep the memory size of the dictionaries [token] and [share_link] as small as we can."""
 
-    def __init__(self, expiration_time_limit, service, token_command):
+    def __init__(self, service, token_command, expiration_time_limit=60000000000):
         self.service = service
         self.expiration_time_limit = expiration_time_limit
         self.token_command = token_command

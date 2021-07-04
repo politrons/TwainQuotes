@@ -18,7 +18,7 @@ class TestQuoteScheduler(unittest.TestCase):
         tokens = handler.tokens
         self.assertEqual(len(tokens), 1)
 
-        quote_scheduler = QuoteSchedulerCleaner(10000, service, handler)
+        quote_scheduler = QuoteSchedulerCleaner(service, handler, 10000)
         scheduler = BackgroundScheduler()
         scheduler.add_job(lambda: quote_scheduler.clean_expired_tokens(), 'interval', seconds=1)
         scheduler.start()
