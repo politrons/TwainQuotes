@@ -6,8 +6,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from app.command.command import CreateTokenCommand
 from app.handler.token_command_handler import TokenCommandHandler
 from app.scheduler.quote_scheduler_cleaner import QuoteSchedulerCleaner
-from app.service.quote_service import QuoteService, ShareCodeNotFoundException
-from domain.exceptions.quote_exceptions import QuoteNotFoundException
+from app.service.quote_service import QuoteService
 
 
 class TestQuoteScheduler(unittest.TestCase):

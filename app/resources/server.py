@@ -30,6 +30,11 @@ scheduler.add_job(lambda: quote_scheduler.clean_expired_share_links(), 'interval
 scheduler.add_job(lambda: quote_scheduler.clean_expired_tokens(), 'interval', seconds=60)
 scheduler.start()
 
+"""
+Encoders
+-----------
+"""
+quotes_encoder = QuotesEncoder()
 
 @app.route('/')
 async def index():
@@ -40,8 +45,7 @@ async def index():
 async def auth_user():
     try:
         logging.debug('Request to auth received')
-        command_dict = request.get_json()
-        command = CreateTokenCommand(**command_dict)
+        command = CreateTokenCommand(**request.get_json())
         token = commandHandler.create_token(command)
         return json.dumps({"token": f"{token}"})
     except Exception as e:
@@ -56,7 +60,7 @@ async def get_quotes():
         token = get_token_from_header()
         commandHandler.validate_token(token)
         user_quotes = service.get_user_quotes()
-        user_quotes_json = QuotesEncoder().encode(user_quotes)
+        user_quotes_json = quotes_encoder.encode(user_quotes)
         return json.dumps(user_quotes_json)
     except token_command_handler.TokenExpiredError:
         logging.error(f"Error, the token has expired.")
@@ -76,7 +80,7 @@ async def get_quote_by_id(quote_id):
         token = get_token_from_header()
         commandHandler.validate_token(token)
         quote = service.get_quote_by_id(quote_id)
-        quote_json = QuotesEncoder().encode(quote.quote)
+        quote_json = quotes_encoder.encode(quote.quote)
         return json.dumps({"quote": "{}".format(quote_json)})
 
     except token_command_handler.TokenExpiredError:
@@ -120,7 +124,7 @@ async def use_share_url(share_url):
     try:
         logging.debug('Request to /share/<share_url> received')
         quote = service.get_quote_from_shared_url(share_url)
-        quote_json = QuotesEncoder().encode(quote.quote)
+        quote_json = quotes_encoder.encode(quote.quote)
         return json.dumps({"quote": "{}".format(quote_json)})
 
     except ShareCodeNotFoundException:
