@@ -18,6 +18,7 @@ logging.basicConfig(filename=Path('../server.log').resolve(), encoding='utf-8', 
 
 commandHandler = TokenCommandHandler(60000000000)
 service = QuoteService()
+quotes_encoder = QuotesEncoder()
 
 """
 Schedulers
@@ -30,11 +31,7 @@ scheduler.add_job(lambda: quote_scheduler.clean_expired_share_links(), 'interval
 scheduler.add_job(lambda: quote_scheduler.clean_expired_tokens(), 'interval', seconds=60)
 scheduler.start()
 
-"""
-Encoders
------------
-"""
-quotes_encoder = QuotesEncoder()
+
 
 @app.route('/')
 async def index():

@@ -47,7 +47,8 @@ class QuoteService:
         return shared_link
 
     def get_quote_from_shared_url(self, shared_link) -> Quote:
-        """TODO:Document me"""
+        """Using the share_link previously created, we use to obtain the quote_id from [shared_links]
+        Once we have the quote_id, we use our [get_quote_by_id] to get the Quote."""
         try:
             quote_id = self.shared_links.pop(shared_link)
             return self.get_quote_by_id(quote_id)
