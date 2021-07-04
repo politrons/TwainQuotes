@@ -1,4 +1,6 @@
 # Twain Quotes 
+![My image](img/mark-twain.png)
+
 
 For the Server I use [Flask](https://flask.palletsprojects.com/en/2.0.x/) framework, to implement the transport
 layer of the project.
