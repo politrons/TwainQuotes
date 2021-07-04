@@ -15,13 +15,10 @@ def generate_shared_code() -> string:
 
 class QuoteService:
 
-    repository = QuoteRepository()
-
-    shared_links = {}
-
-    expiration_shared_link = {}
-
-    minute_in_ns = 60000000000
+    def __init__(self):
+        self.repository = QuoteRepository()
+        self.shared_links = {}
+        self.expiration_shared_link = {}
 
     def get_user_quotes(self) -> UserQuotes:
         """ We search in the repository for all quotes that are part of hardcoded user [Politrons]"""

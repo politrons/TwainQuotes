@@ -14,6 +14,13 @@ In Twain Quotes  I implemented three modules described like:
 * ```Domain```: Layer where you implement the business logic of your application in your entities. It does not have any dependency.
 * ```Infrastructure```: Layer where you have the persistent layer. It has dependency with domain.
 
+## DDD
+
+Domain Driven Design it's a design pattern for dealing with highly complex domains that is based on making the domain itself the main focus of the project.
+
+![My image](img/twain_ddd.png)
+
+
 ##Testing
 ![My image](img/testPyramid.png)
 
