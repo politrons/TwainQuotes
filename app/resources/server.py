@@ -32,7 +32,6 @@ scheduler.add_job(lambda: quote_scheduler.clean_expired_tokens(), 'interval', se
 scheduler.start()
 
 
-
 @app.route('/')
 async def index():
     return 'Twain quotes server. Author Pablo Perez Garcia'

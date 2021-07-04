@@ -23,5 +23,6 @@ class QuoteSchedulerCleaner:
             expiration_time = tuple_expiration_time_and_count[0]
             if (time.perf_counter_ns() - expiration_time) > self.expiration_time_limit:
                 """We delete the expired token """
+                print("Delete share link")
                 logging.debug(f"Deleting expired token {token}")
                 self.token_command.tokens.pop(token)

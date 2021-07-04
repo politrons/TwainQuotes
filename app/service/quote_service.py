@@ -14,6 +14,7 @@ def generate_shared_code() -> string:
 
 
 class QuoteService:
+
     repository = QuoteRepository()
 
     shared_links = {}
