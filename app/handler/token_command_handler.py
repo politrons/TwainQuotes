@@ -6,7 +6,7 @@ from app.exceptions.token_exceptions import TokenExpiredError
 
 class TokenCommandHandler:
 
-    def __init__(self, minute_in_ns):
+    def __init__(self, minute_in_ns=60000000000):
         self.minute_in_ns = minute_in_ns
 
     tokens = {}

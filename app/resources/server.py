@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 logging.basicConfig(filename=Path('../server.log').resolve(), encoding='utf-8', level=logging.DEBUG)
 
-commandHandler = TokenCommandHandler(60000000000)
+commandHandler = TokenCommandHandler()
 service = QuoteService()
 quotes_encoder = QuotesEncoder()
 
