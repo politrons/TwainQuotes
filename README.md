@@ -3,7 +3,7 @@
 
 
 For the Server I use [Flask](https://flask.palletsprojects.com/en/2.0.x/) framework, to implement the transport
-layer of the project.
+layer. The rest of the project follow an ````Hexagonal```` architecture pattern.
 
 ## Hexagonal
 ![My image](img/ddd.png)
