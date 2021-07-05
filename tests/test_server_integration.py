@@ -62,7 +62,6 @@ class TestServer(unittest.TestCase):
             rv = client.get('/quotes/16166cf3')
         self.assertTrue(rv.status_code == 200)
         json_quote = json.loads(rv.get_data())
-
         self.assertTrue(json_quote)
         self.assertEqual(json_quote["quote"], '"The secret of getting ahead is getting started."')
 
@@ -85,3 +84,27 @@ class TestServer(unittest.TestCase):
         json_share_link = json.loads(rv.get_data())
         self.assertTrue(json_share_link)
         self.assertTrue(json_share_link["share_url"])
+
+    def test_use_share_link(self):
+        """
+        GIVEN a Flask application for testing
+        WHEN the '/auth' with username and password is requested (POST)
+        THEN check that the response is a valid token
+        """
+        with app.test_client() as client:
+            client.environ_base['Content-Type'] = 'application/json'
+            rv = client.post('/auth', json={
+                'username': 'politrons', 'password': 'secret'
+            })
+        json_token = json.loads(rv.get_data())
+        with app.test_client() as client:
+            client.environ_base['HTTP_AUTHORIZATION'] = 'Bearer ' + json_token["token"]
+            rv = client.get('/quotes/16166cf3/share')
+        json_share_link = json.loads(rv.get_data())
+        share_url = json_share_link["share_url"]
+        with app.test_client() as client:
+            rv = client.get(share_url)
+        self.assertTrue(rv.status_code == 200)
+        json_quote = json.loads(rv.get_data())
+        self.assertTrue(json_quote)
+        self.assertEqual(json_quote["quote"], '"The secret of getting ahead is getting started."')
