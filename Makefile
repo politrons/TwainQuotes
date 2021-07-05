@@ -21,6 +21,8 @@ performance:
 	pytest tests/test_performance_auth.py::test_my_stuff
 	pytest tests/test_performance_quotes.py::test_my_stuff
 	pytest tests/test_performance_quote_id.py::test_my_stuff
+	pytest tests/test_performance_create_share_url.py::test_my_stuff
+
 
 clean:
 	rm -rf $(VENV)
