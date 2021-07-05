@@ -23,6 +23,7 @@ Domain Driven Design it's a design pattern for dealing with highly complex domai
 ![My image](img/twain_ddd.png)
 
 
+
 ##Testing
 
 ![My image](img/testPyramid.png)
