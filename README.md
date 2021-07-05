@@ -24,8 +24,6 @@ Domain Driven Design it's a design pattern for dealing with highly complex domai
 
 
 
-##Testing
-
 ![My image](img/testPyramid.png)
 
 **To go fast you have to go well** this quote of Robert C. Martin express perfectly what TDD and BDD is. You should think first in all corner cases of your program, and then implement
