@@ -65,3 +65,23 @@ class TestServer(unittest.TestCase):
 
         self.assertTrue(json_quote)
         self.assertEqual(json_quote["quote"], '"The secret of getting ahead is getting started."')
+
+    def test_create_share_link(self):
+        """
+        GIVEN a Flask application for testing
+        WHEN the '/auth' with username and password is requested (POST)
+        THEN check that the response is a valid token
+        """
+        with app.test_client() as client:
+            client.environ_base['Content-Type'] = 'application/json'
+            rv = client.post('/auth', json={
+                'username': 'politrons', 'password': 'secret'
+            })
+        json_token = json.loads(rv.get_data())
+        with app.test_client() as client:
+            client.environ_base['HTTP_AUTHORIZATION'] = 'Bearer ' + json_token["token"]
+            rv = client.get('/quotes/16166cf3/share')
+        self.assertTrue(rv.status_code == 200)
+        json_share_link = json.loads(rv.get_data())
+        self.assertTrue(json_share_link)
+        self.assertTrue(json_share_link["share_url"])
